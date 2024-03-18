@@ -33,18 +33,12 @@ class User {
     id:                 string;
     name:               string;
     pseudo:             string;
-    avatarURL:          string;
-    isLearner:          boolean;
-    isTeacher:          boolean;
     createdAt:          Date;
     updatedAt:          Date | null;
 }
 class UserPayload {
     name:               string;
     pseudo:             string;
-    avatarURL:          string;
-    isLearner:          boolean;
-    isTeacher:          boolean;
 }
 
 const usersStorage = StableBTreeMap<string, User>(0);
@@ -157,6 +151,8 @@ export function updateUser(userId: string, payload: UserPayload): User | string 
     }
     const user  = getUser(userId);
     const updatedUser: User = {
+        id: userId,
+        createdAt: getCurrentDate(),
         ...user.Some,
         ...payload,
         updatedAt: getCurrentDate(),
@@ -164,25 +160,6 @@ export function updateUser(userId: string, payload: UserPayload): User | string 
     usersStorage.insert(userId, updatedUser);
     return updatedUser;
 }
-
-/**
- * @name setAvatar
- * @param avatarURL
- * @param userId
- * @returns User
- */
-export function setAvatar(userId: string, avatarURL: string): User | string {
-    if (!checkUserId(userId)) {
-        return `Error: user does not exist`;
-    }
-    else {
-        let user = getUser(userId).Some;
-        user.avatarURL = avatarURL;
-        usersStorage.insert(userId, user);
-        return user;
-    }
-}
-
 
 /**
  * @name removeUser
