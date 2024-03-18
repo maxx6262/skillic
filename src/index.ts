@@ -1,1 +1,3 @@
-// cannister code goes here
+import { User} from "./User/user";
+import { Outcome } from "./Outcome/outcome";
+import { Course } from "./Course/course";
