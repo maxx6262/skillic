@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { StableBTreeMap, Vec, Opt, ic } from 'azle';
-import {checkUserId } from "../User/user";
-import {chetOutcomeId} from "../Outcome/outcome";
+import { checkUserId } from "../User/user";
+import { chetOutcomeId} from "../Outcome/outcome";
 
 /**
  * Course is defined into Course class structure that includes

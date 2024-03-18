@@ -29,7 +29,7 @@ import { StableBTreeMap, Vec, Opt, ic } from 'azle';
 /**
  * This type represents an User that can be listed on a board
  */
-export class User {
+class User {
     id:                 string;
     name:               string;
     pseudo:             string;
@@ -39,7 +39,7 @@ export class User {
     createdAt:          Date;
     updatedAt:          Date | null;
 }
-export class UserPayload {
+class UserPayload {
     name:               string;
     pseudo:             string;
     avatarURL:          string;
@@ -55,7 +55,7 @@ const usersStorage = StableBTreeMap<string, User>(0);
  * @description 'get all stored users'
  * @return Vec<User>
  */
-function getUsers(): Vec<User> {
+export function getUsers(): Vec<User> {
     return usersStorage.values();
 }
 
@@ -119,7 +119,7 @@ export function checkUserId(userId: string): boolean {
  * @return string
  * @description 'returns userId in case of matching User found'
  */
-function getIdFromPseudo(pseudo: string): string | null {
+export function getIdFromPseudo(pseudo: string): string | null {
     for (const user of usersStorage.values()) {
         if (user.pseudo === pseudo) {
             return user.id;
@@ -134,7 +134,7 @@ function getIdFromPseudo(pseudo: string): string | null {
  * @return boolean
  * @description `return validity of payload regarding specifications`
  */
-function checkPayload(payload: UserPayload): boolean {
+export function checkPayload(payload: UserPayload): boolean {
     return (payload.name.trim().length + payload.pseudo.trim().length > 2);
 }
 
@@ -145,7 +145,7 @@ function checkPayload(payload: UserPayload): boolean {
  * @return Opt<User>
  * @description `update User matching id with payload values`
  */
-function updateUser(userId: string, payload: UserPayload): User | string {
+export function updateUser(userId: string, payload: UserPayload): User | string {
     if (!checkUserId(userId)) {
         return `Error: can't update user cause no user found matching id=${userId})`;
     }
@@ -176,7 +176,7 @@ export function setAvatar(userId: string, avatarURL: string): User | string {
         return `Error: user does not exist`;
     }
     else {
-        let user: User = getUser(userId).Some;
+        let user = getUser(userId).Some;
         user.avatarURL = avatarURL;
         usersStorage.insert(userId, user);
         return user;
@@ -200,6 +200,6 @@ function removeUser(userId: string): Opt<User> | string {
 
 // Internal utils function
 function getCurrentDate() {
-    const timestamp = new Number(ic.time());
+    const timestamp = Number(ic.time());
     return new Date(timestamp.valueOf() / 1000_000);
 }
