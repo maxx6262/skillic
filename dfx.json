@@ -19,6 +19,44 @@
           "content": "azle"
         }
       ]
+    },
+    "outcome_board": {
+      "type": "custom",
+      "main": "src/Outcome/outcome.ts",
+      "candid": "src/Outcome/outcome.did",
+      "build": "npx azle outcome_board",
+      "ts": "src/Outcome/outcome.ts",
+      "wasm": ".azle/outcome_board/outcome_board.wasm",
+      "gzip": true,
+      "metadata": [
+        {
+          "name": "candid/service",
+          "path": "src/Outcome/outcome.did"
+        },
+        {
+          "name": "cdk:name",
+          "content": "azle"
+        }
+      ]
+    },
+    "course_board": {
+      "type": "custom",
+      "main": "src/Course/course.ts",
+      "candid": "src/Course/course.did",
+      "build": "npx azle course_board",
+      "ts": "src/Course/course.ts",
+      "wasm": ".azle/course_board/course_board.wasm",
+      "gzip": true,
+      "metadata": [
+        {
+          "name": "candid/service",
+          "path": "src/Course/course.did"
+        },
+        {
+          "name": "cdk:name",
+          "content": "azle"
+        }
+      ]
     }
   }
 }

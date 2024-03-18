@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
 import { StableBTreeMap, Vec, Opt, ic } from 'azle';
-import e from "express";
 
 /**
  * User is defined into User class structure that includes
@@ -30,18 +29,22 @@ import e from "express";
 /**
  * This type represents an user that can be listed on a board
  */
-class User {
+export class User {
     id:                 string;
     name:               string;
     pseudo:             string;
     avatarURL:          string;
+    isLearner:          boolean;
+    isTeacher:          boolean;
     createdAt:          Date;
     updatedAt:          Date | null;
 }
-class UserPayload {
+export class UserPayload {
     name:               string;
     pseudo:             string;
     avatarURL:          string;
+    isLearner:          boolean;
+    isTeacher:          boolean;
 }
 
 const usersStorage = StableBTreeMap<string, User>(0);
@@ -52,7 +55,7 @@ const usersStorage = StableBTreeMap<string, User>(0);
  * @description 'get all stored users'
  * @return Vec<User>
  */
-export function getUsers(): Vec<User> {
+function getUsers(): Vec<User> {
     return usersStorage.values();
 }
 
@@ -72,7 +75,7 @@ export function getUser(userId: string): Opt<User> {
  * @return Opt<User>
  * @description 'create new User with payload content'
  */
-function addUser(payload: UserPayload): User | string {
+export function addUser(payload: UserPayload): User | string {
     if (!(checkPayload(payload))) return `Error: invalid payload : \n name=${payload.name} \n pseudo=${payload.pseudo}`;
     if (checkPseudo(payload.pseudo)) return `Error: can't create user cause ${payload.pseudo} already exists`;
     const user: User = {
@@ -91,7 +94,7 @@ function addUser(payload: UserPayload): User | string {
  * @return boolean
  * @description 'check existence of still stored user with pseudo value'
  */
-export function checkPseudo(pseudo: string): boolean {
+function checkPseudo(pseudo: string): boolean {
     for (const user of usersStorage.values()) {
         if (user.pseudo.trim() === pseudo.trim()) {
             return true;
@@ -131,7 +134,7 @@ export function getIdFromPseudo(pseudo: string): string | null {
  * @return boolean
  * @description `return validity of payload regarding specifications`
  */
-function checkPayload(payload: UserPayload): boolean {
+export function checkPayload(payload: UserPayload): boolean {
     return (payload.name.trim().length + payload.pseudo.trim().length > 2);
 }
 
@@ -142,7 +145,7 @@ function checkPayload(payload: UserPayload): boolean {
  * @return Opt<User>
  * @description `update user matching id with payload values`
  */
-export function updateUser(userId: string, payload: UserPayload): User | string {
+function updateUser(userId: string, payload: UserPayload): User | string {
     if (!checkUserId(userId)) {
         return `Error: can't update user cause no user found matching id=${userId})`;
     }
@@ -152,16 +155,34 @@ export function updateUser(userId: string, payload: UserPayload): User | string 
     if (!checkPayload(payload)) {
         return `Error: can't update user cause unvalid payload=${payload}`;
     }
-    const user: User = getUser(userId).Some;
+    const user  = getUser(userId);
     const updatedUser: User = {
-        id: userId,
-        ...user,
+        ...user.Some,
         ...payload,
         updatedAt: getCurrentDate(),
     };
     usersStorage.insert(userId, updatedUser);
     return updatedUser;
 }
+
+/**
+ * @name setAvatar
+ * @param avatarURL
+ * @param userId
+ * @returns User
+ */
+export function setAvatar(userId: string, avatarURL: string): User | string {
+    if (!checkUserId(userId)) {
+        return `Error: user does not exist`;
+    }
+    else {
+        let user: UserPayload = getUser(userId);
+        user.avatarURL = avatarURL;
+        usersStorage.insert(userId, user);
+        return user;
+    }
+}
+
 
 /**
  * @name removeUser
