@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import {StableBTreeMap, ic, Vec, Opt} from 'azle';
-import { checkUserId, checkPseudo, getUser, U } from '../User/user.ts';
+import { checkUserId, checkPseudo, getUserU } from '../User/user.ts';
 
 /**
  * Session is defined into User class structure that includes
