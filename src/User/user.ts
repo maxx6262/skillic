@@ -4,11 +4,11 @@ import { StableBTreeMap, Vec, Opt, ic } from 'azle';
 /**
  * User is defined into User class structure that includes
  * - UserPayload: out-contract data representing User
- * - userId: internal id to retrieve user from storage
+ * - userId: internal id to retrieve User from storage
  * - createdAt/updatedAt: Log data
  * User must have unique value for next fields:
  * - id: Internal id for technical reason
- * - pseudo: it's a needing to identify unique user out of contract scope
+ * - pseudo: it's a needing to identify unique User out of contract scope
  * ****
  * `usersStorage` it's a key-value datastructure that is used to store users.
  * {@Link StableBTreeMap} is a self-balancing tree that acts as
@@ -20,14 +20,14 @@ import { StableBTreeMap, Vec, Opt, ic } from 'azle';
  *
  *  Brakedown of the `StableBTreeMap(string, User)` datastructure:
  *  - the key value of map is an `userId`
- *  - the value in this map is an user itself `User` that is related to a given key (`userId`)
+ *  - the value in this map is an User itself `User` that is related to a given key (`userId`)
  *
  *  Constructor values:
  *  1) 0 - memory id where to initialize a map.
  */
 
 /**
- * This type represents an user that can be listed on a board
+ * This type represents an User that can be listed on a board
  */
 export class User {
     id:                 string;
@@ -63,7 +63,7 @@ function getUsers(): Vec<User> {
  * @name getUser
  * @param string
  * @return Opt<User>
- * @description get user matching @userId
+ * @description get User matching @userId
  */
 export function getUser(userId: string): Opt<User> {
     return usersStorage.get(userId) || `no user found matching id=${userId}`;
@@ -92,9 +92,9 @@ export function addUser(payload: UserPayload): User | string {
  * @name checkPseudo
  * @param string
  * @return boolean
- * @description 'check existence of still stored user with pseudo value'
+ * @description 'check existence of still stored User with pseudo value'
  */
-function checkPseudo(pseudo: string): boolean {
+export function checkPseudo(pseudo: string): boolean {
     for (const user of usersStorage.values()) {
         if (user.pseudo.trim() === pseudo.trim()) {
             return true;
@@ -117,9 +117,9 @@ export function checkUserId(userId: string): boolean {
  * @name getIdFromPseudo
  * @param string
  * @return string
- * @description 'returns userId in case of matching user found'
+ * @description 'returns userId in case of matching User found'
  */
-export function getIdFromPseudo(pseudo: string): string | null {
+function getIdFromPseudo(pseudo: string): string | null {
     for (const user of usersStorage.values()) {
         if (user.pseudo === pseudo) {
             return user.id;
@@ -134,7 +134,7 @@ export function getIdFromPseudo(pseudo: string): string | null {
  * @return boolean
  * @description `return validity of payload regarding specifications`
  */
-export function checkPayload(payload: UserPayload): boolean {
+function checkPayload(payload: UserPayload): boolean {
     return (payload.name.trim().length + payload.pseudo.trim().length > 2);
 }
 
@@ -143,7 +143,7 @@ export function checkPayload(payload: UserPayload): boolean {
  * @param userId
  * @param payload
  * @return Opt<User>
- * @description `update user matching id with payload values`
+ * @description `update User matching id with payload values`
  */
 function updateUser(userId: string, payload: UserPayload): User | string {
     if (!checkUserId(userId)) {
@@ -176,7 +176,7 @@ export function setAvatar(userId: string, avatarURL: string): User | string {
         return `Error: user does not exist`;
     }
     else {
-        let user: UserPayload = getUser(userId);
+        let user: User = getUser(userId).Some;
         user.avatarURL = avatarURL;
         usersStorage.insert(userId, user);
         return user;
@@ -188,9 +188,9 @@ export function setAvatar(userId: string, avatarURL: string): User | string {
  * @name removeUser
  * @param userId
  * @return User | string
- * @description `removes user matching userId from data storage`
+ * @description `removes User matching userId from data storage`
  */
-export function removeUser(userId: string): Opt<User> | string {
+function removeUser(userId: string): Opt<User> | string {
     if (!checkUserId(userId)) {
         return `can't remove user cause no user found matching id=${userId}`;
     }

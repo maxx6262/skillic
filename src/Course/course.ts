@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from 'uuid';
-import { StableBTreeMap, Vec, Opt, ic, nat64 } from 'azle';
-import {User, checkUserId, checkPayload} from "../user";
-import {Outcome, chetOutcomeId, getOutcome} from "../Outcome/outcome";
+import { StableBTreeMap, Vec, Opt, ic } from 'azle';
+import {checkUserId } from "../User/user";
+import {chetOutcomeId} from "../Outcome/outcome";
 
 /**
  * Course is defined into Course class structure that includes
  * - CoursePayload: out-contract data representing Course
- * - courseId: internal id to retrieve user from storage
+ * - courseId: internal id to retrieve User from storage
  * - createdAt/updatedAt: Log data
  * Course must have unique value for next fields:
  * - id: Internal id for technical reason

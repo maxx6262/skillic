@@ -1,11 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
 import {StableBTreeMap, ic, Vec, Opt} from 'azle';
-import { checkUserId, checkPseudo, getUser, U } from  '../user/index.ts';
+import { checkUserId, checkPseudo, getUser, U } from '../User/user.ts';
 
 /**
  * Session is defined into User class structure that includes
  * - SessionPayload: out-contract data representing User
- * - sessionId: internal id to retrieve user from storage
+ * - sessionId: internal id to retrieve User from storage
  * - createdAt/updatedAt: Log data
  * Session must have unique value for next fields:
  * - id: Internal id for technical reason
